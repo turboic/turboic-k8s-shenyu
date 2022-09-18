@@ -1,0 +1,40 @@
+docker stop test && docker rm test
+docker images  | grep zhxl1989 | awk '{print $3}' | xargs docker rmi
+docker build -t zhxl1989/xxl-job:2.3.1 .
+docker push zhxl1989/xxl-job:2.3.1
+
+kubectl describe pod xxl-job
+
+
+docker stop test && docker rm test
+docker run -itd --privileged=true --name test -p 8080:8080 -v /home/deploy/:/app/config/ --restart unless-stopped zhxl1989/xxl-job:2.3.1
+docker logs -f test
+	
+kubectl exec -it dnsutils nslookup kubernetes.default
+
+
+
+kubectl exec -it dnsutils -- cat /etc/resolv.conf
+
+kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
+
+
+kubectl get endpoints coredns --namespace=kube-system
+
+
+kubectl describe svc coredns --namespace=kube-system
+
+
+kubectl -n kube-system edit configmap coredns
+
+
+kubectl logs -f  --namespace=kube-system -l k8s-app=kube-dns
+
+
+
+kubectl get svc kube-dns -n kube-system
+kubectl get deployment coredns -n kube-system
+
+
+
+

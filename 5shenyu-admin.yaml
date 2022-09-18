@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: shenyu
+  name: shenyu-admin-svc
+spec:
+  selector:
+    app: shenyu-admin
+  type: NodePort
+  ports:
+  - protocol: TCP
+    port: 9095
+    targetPort: 9095
+    nodePort: 31095
+---
+# shenyu-admin
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: shenyu
+  name: shenyu-admin
+spec:
+  selector:
+    matchLabels:
+      app: shenyu-admin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: shenyu-admin
+    spec:
+      volumes:
+      - name: mysql-connector-volume
+        persistentVolumeClaim:
+          claimName: shenyu-pvc
+          
+      - name: shenyu-admin-config
+        configMap:
+          name: shenyu-cm
+          items:
+          - key: application-mysql.yml
+            path: application-mysql.yml
+            
+      containers:
+      - name: shenyu-admin
+        image: zhxl1989/shenyu-admin:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9095
+        env:
+        - name: 'TZ'
+          value: 'Asia/Beijing'
+        - name: SPRING_PROFILES_ACTIVE
+          value: mysql
+        volumeMounts:
+        - name: shenyu-admin-config
+          mountPath: /opt/shenyu-admin/config/application-mysql.yml
+          subPath: application-mysql.yml
+          
+        - mountPath: /opt/shenyu-admin/ext-lib
+          name: mysql-connector-volume

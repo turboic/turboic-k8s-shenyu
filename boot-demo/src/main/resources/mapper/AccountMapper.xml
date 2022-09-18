@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.cloud.dao.AccountDao">
+    <select id="selectAccountPage" resultType="com.example.cloud.model.Account">
+        SELECT * FROM account
+        <where>
+            <if test="username!=null and username!=''">
+                and username = #{username}
+            </if>
+            <if test="password!=null and password!=''">
+                and password = #{password}
+            </if>
+            <if test="pic!=null and pic!=''">
+                and pic = #{pic}
+            </if>
+            <if test="url!=null and url!=''">
+                and url = #{url}
+            </if>
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+            <if test="id!=null">
+                and id = #{id}
+            </if>
+        </where>
+    </select>
+</mapper>

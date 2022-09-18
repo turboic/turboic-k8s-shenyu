@@ -1,0 +1,11 @@
+docker build -t zhxl1989/boot-demo:12306 .
+docker push zhxl1989/boot-demo:12306
+
+
+
+访问地址
+
+http://10.10.10.99:32190/boot-demo/main/video
+
+
+

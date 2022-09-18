@@ -1,0 +1,91 @@
+1、下载文件,部署Ingress Controller
+wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.2.1/deploy/static/provider/cloud/deploy.yaml
+对应的编辑完成的文件deploy.yaml
+
+部署Ingress Controller
+    kubectl apply -f deploy.yaml
+	
+删除Ingress Controller
+    kubectl delete -f deploy.yaml
+	
+	
+2、查看Ingress Controller部署结果、状态,部分镜像拉取失败，需要到docker hub找相同版本，pull到本地，然后tag到需要的名称
+
+    docker pull lianyuxue1020/kube-webhook-certgen:v1.1.1
+
+    docker tag lianyuxue1020/kube-webhook-certgen:v1.1.1 k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1
+
+    docker tag k8s.gcr.io/ingress-nginx/kube-webhook-certgen:v1.1.1 zhxl1989/ingress-nginx-kube-webhook-certgen:v1.1.1
+
+    docker pull dyrnq/ingress-nginx-controller:v1.2.1
+    docker tag dyrnq/ingress-nginx-controller:v1.2.1 k8s.gcr.io/ingress-nginx/controller:v1.2.1
+
+    docker tag k8s.gcr.io/ingress-nginx/controller:v1.2.1 zhxl1989/ingress-nginx-controller:v1.2.1
+
+
+kubectl get all -n ingress-nginx
+或者
+kubectl get pods,svc -n ingress-nginx
+
+如果ingress-nginx-controller出现错误,可通过日志查看或者pod描述查询细节的信息
+
+   kubectl logs -f ingress-nginx-controller-6648b5dbb8-65ws4 -n ingress-nginx
+   
+   kubectl describe pod ingress-nginx-controller-6648b5dbb8-65ws4 -n ingress-nginx
+   
+
+3、运行服务
+boot-demo.yaml是包含spring-boot打包的演示。
+需要打包成镜像服务
+docker build -t boot-demo .
+
+docker tag boot-demo:latest zhxl1989/boot-demo:latest
+
+
+docker push zhxl1989/boot-demo:latest
+
+
+tomcat.yaml是包含tomcat的演示。
+不能同时执行
+
+运行 kubectl apply -f 
+删除 kubectl delete -f
+
+4、配置host的映射，kubesphere 可配置server的通过端口访问，边缘验证服务的有效性。
+
+
+kubectl label node liebe app=ingress
+
+kubectl get nodes --show-labels
+https://www.cnblogs.com/linuxws/p/12661101.html
+
+5、验证测试
+
+
+kubectl get pods -o wide
+
+
+
+6、docker 容器操作
+
+docker images  | grep demo | awk '{print $3}' | xargs docker rmi -f
+
+kubectl cp mysql-7b6ddb98b4-9rhxt:etc/my.cnf -n shenyu -c mysql my.cnf
+
+kubectl cp pod名称:容器内文件绝对路径 -n 名称空间 -c 容器名 宿主机本地路劲
+
+
+kubectl delete pod 名称  --force --grace-period=0 -n 名称空间
+
+
+
+kubectl patch pv pvc-ebcf4e81-4ba8-4306-a91f-4006edd3a7e6 -p '{"metadata":{"finalizers":null}}'
+
+
+kubectl patch pv pvc-ebcf4e81-4ba8-4306-a91f-4006edd3a7e6 -p '{"metadata":{"finalizers":null}}'  
+
+
+
+./kk create cluster --with-kubernetes v1.22.10 --with-kubesphere v3.3.0
+            
+

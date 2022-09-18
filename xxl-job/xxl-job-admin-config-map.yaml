@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xxl-job-config
+  namespace: default
+data:
+  application.properties: |
+    ### web
+    server.port=${server.port}
+    server.servlet.context-path=${server.servlet.context-path}
+    
+    ### actuator
+    management.server.servlet.context-path=/actuator
+    management.health.mail.enabled=false
+    
+    ### resources
+    spring.mvc.servlet.load-on-startup=0
+    spring.mvc.static-path-pattern=/static/**
+    spring.resources.static-locations=classpath:/static/
+    
+    ### freemarker
+    spring.freemarker.templateLoaderPath=classpath:/templates/
+    spring.freemarker.suffix=.ftl
+    spring.freemarker.charset=UTF-8
+    spring.freemarker.request-context-attribute=request
+    spring.freemarker.settings.number_format=0.##########
+
+    ### mybatis
+    mybatis.mapper-locations=classpath:/mybatis-mapper/*Mapper.xml
+    #mybatis.type-aliases-package=com.xxl.job.admin.core.model
+
+    ### xxl-job, datasource
+    spring.datasource.url=${datasource.url}
+    spring.datasource.username=${datasource.username}
+    spring.datasource.password=${datasource.password}
+    spring.datasource.driver-class-name=${datasource.driver.class.name}
+
+    ### datasource-pool
+    spring.datasource.type=com.zaxxer.hikari.HikariDataSource
+    spring.datasource.hikari.minimum-idle=10
+    spring.datasource.hikari.maximum-pool-size=30
+    spring.datasource.hikari.auto-commit=true
+    spring.datasource.hikari.idle-timeout=30000
+    spring.datasource.hikari.pool-name=HikariCP
+    spring.datasource.hikari.max-lifetime=900000
+    spring.datasource.hikari.connection-timeout=10000
+    spring.datasource.hikari.connection-test-query=SELECT 1
+    spring.datasource.hikari.validation-timeout=1000
+
+    ### xxl-job, email
+    spring.mail.host=${mail.host}
+    spring.mail.port=${mail.port}
+    spring.mail.username=${mail.username}
+    spring.mail.from=${mail.username}
+    spring.mail.password=${mail.password}
+    spring.mail.properties.mail.smtp.auth=${mail.properties.mail.smtp.auth}
+    spring.mail.properties.mail.smtp.starttls.enable=${mail.properties.mail.smtp.starttls.enable}
+    spring.mail.properties.mail.smtp.starttls.required=${mail.properties.mail.smtp.starttls.required}
+    spring.mail.properties.mail.smtp.socketFactory.class=${mail.properties.mail.smtp.socketFactory.class}
+
+    ### xxl-job, access token
+    xxl.job.accessToken=default_token
+
+    ### xxl-job, i18n (default is zh_CN, and you can choose "zh_CN", "zh_TC" and "en")
+    xxl.job.i18n=${i18n}
+
+    ## xxl-job, triggerpool max size
+    xxl.job.triggerpool.fast.max=${fast}
+    xxl.job.triggerpool.slow.max=${slow}
+
+    ### xxl-job, log retention days
+    xxl.job.logretentiondays=${logretentiondays}

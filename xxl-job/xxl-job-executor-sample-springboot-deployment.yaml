@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: xxl-job-executor-sample-springboot
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: xxl-job-executor-sample-springboot
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app: xxl-job-executor-sample-springboot
+        release: default
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: xxl-job-executor-sample-springboot
+        image: zhxl1989/xxl-job-executor-sample-springboot:2.3.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+          name: http
+        - containerPort: 9999
+          name: executor
+        resources:
+            limits:
+              cpu: '1'
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: volume-localtime
+      volumes:
+        - hostPath:
+            path: /etc/localtime
+            type: ''
+          name: volume-localtime
