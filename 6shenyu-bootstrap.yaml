@@ -13,7 +13,6 @@ spec:
     targetPort: 9195
     nodePort: 31195
 ---
-# shenyu-bootstrap
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -43,7 +42,7 @@ spec:
         - containerPort: 9195
         env:
         - name: TZ
-          value: Asia/Beijing
+          value: Asia/Shanghai
         volumeMounts:
         - name: shenyu-bootstrap-config
           mountPath: /opt/shenyu-bootstrap/conf/application-local.yml

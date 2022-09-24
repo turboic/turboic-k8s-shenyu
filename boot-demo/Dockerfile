@@ -4,7 +4,7 @@ ENV MYPATH /
 WORKDIR $MYPATH
 ARG JAR_FILE=*.jar
 COPY ${JAR_FILE} boot-demo.jar
-RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-RUN echo 'Asia/Shanghai' >/etc/timezone
+ENV TZ=PRC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 EXPOSE 12306
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","boot-demo.jar"]

@@ -13,7 +13,6 @@ spec:
     targetPort: 9095
     nodePort: 31095
 ---
-# shenyu-admin
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -32,8 +31,7 @@ spec:
       volumes:
       - name: mysql-connector-volume
         persistentVolumeClaim:
-          claimName: shenyu-pvc
-          
+          claimName: shenyu-pvc          
       - name: shenyu-admin-config
         configMap:
           name: shenyu-cm
@@ -48,14 +46,14 @@ spec:
         ports:
         - containerPort: 9095
         env:
-        - name: 'TZ'
-          value: 'Asia/Beijing'
+        - name: TZ
+          value: Asia/Shanghai
         - name: SPRING_PROFILES_ACTIVE
           value: mysql
         volumeMounts:
         - name: shenyu-admin-config
           mountPath: /opt/shenyu-admin/config/application-mysql.yml
-          subPath: application-mysql.yml
-          
+          subPath: application-mysql.yml          
         - mountPath: /opt/shenyu-admin/ext-lib
           name: mysql-connector-volume
+    

@@ -54,6 +54,8 @@ spec:
         env:
         - name: MYSQL_ROOT_PASSWORD
           value: '123456'
+        - name: TZ
+          value: Asia/Shanghai
         volumeMounts:
         - name: mysql-persistent-storage
           mountPath: /var/lib/mysql
